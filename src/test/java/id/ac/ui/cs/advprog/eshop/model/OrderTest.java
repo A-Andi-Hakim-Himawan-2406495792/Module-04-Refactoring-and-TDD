@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.OrderStatus; // Import enum OrderStatus
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,6 @@ class OrderTest {
         this.products.add(product2);
     }
 
-    // 4. Create unhappy path test: Test to create the order with empty products.
     @Test
     void testCreateOrderEmptyProduct() {
         this.products.clear();
@@ -41,7 +41,6 @@ class OrderTest {
         });
     }
 
-    // 5. Create a happy path test: Test to create the order with no status defined.
     @Test
     void testCreateOrderDefaultStatus() {
         Order order = new Order(UUID.fromString("13652556-012a-4c07-b546-54eb1396d79b"),
@@ -55,18 +54,21 @@ class OrderTest {
         assertEquals(UUID.fromString("13652556-012a-4c07-b546-54eb1396d79b"), order.getId());
         assertEquals(1708560000L, order.getOrderTime());
         assertEquals("Safira Sudrajat", order.getAuthor());
-        assertEquals("WAITING_PAYMENT", order.getStatus());
+
+        // Refactor: Menggunakan Enum untuk mengecek default status
+        assertEquals(OrderStatus.WAITING_PAYMENT.getValue(), order.getStatus());
     }
 
-    // 6. Create a happy path test: Test to create the order status of "SUCCESS".
     @Test
     void testCreateOrderSuccessStatus() {
+        // Refactor: Menggunakan Enum saat inisialisasi status Order
         Order order = new Order(UUID.fromString("13652556-012a-4c07-b546-54eb1396d79b"),
-                this.products, 1708560000L, "Safira Sudrajat", "SUCCESS");
-        assertEquals("SUCCESS", order.getStatus());
+                this.products, 1708560000L, "Safira Sudrajat", OrderStatus.SUCCESS.getValue());
+
+        // Refactor: Menggunakan Enum untuk assertion
+        assertEquals(OrderStatus.SUCCESS.getValue(), order.getStatus());
     }
 
-    // 7. Create an unhappy path test: Test to create the order with invalid status.
     @Test
     void testCreateOrderInvalidStatus() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -75,16 +77,18 @@ class OrderTest {
         });
     }
 
-    // 8. Create a happy path test: Test to edit the order with one of correct status.
     @Test
     void testSetStatusToCancelled() {
         Order order = new Order(UUID.fromString("13652556-012a-4c07-b546-54eb1396d79b"),
                 this.products, 1708560000L, "Safira Sudrajat");
-        order.setStatus("CANCELLED");
-        assertEquals("CANCELLED", order.getStatus());
+
+        // Refactor: Menggunakan Enum untuk set status
+        order.setStatus(OrderStatus.CANCELLED.getValue());
+
+        // Refactor: Menggunakan Enum untuk assertion
+        assertEquals(OrderStatus.CANCELLED.getValue(), order.getStatus());
     }
 
-    // 9. Create an unhappy path test: Test to edit the order with invalid status.
     @Test
     void testSetStatusToInvalidStatus() {
         Order order = new Order(UUID.fromString("13652556-012a-4c07-b546-54eb1396d79b"),
