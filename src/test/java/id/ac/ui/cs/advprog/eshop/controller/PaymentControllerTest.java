@@ -37,7 +37,7 @@ class PaymentControllerTest {
     void setUp() {
         List<Product> products = new ArrayList<>();
         Product product = new Product();
-        product.setProductId(UUID.randomUUID().toString());
+        product.setProductId(UUID.randomUUID());
         product.setProductName("Produk Dummy");
         product.setProductQuantity(1);
         products.add(product);
