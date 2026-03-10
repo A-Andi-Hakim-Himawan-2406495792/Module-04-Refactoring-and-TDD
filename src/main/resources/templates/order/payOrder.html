@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pay Order</title>
+</head>
+<body>
+<h2>Pay Order ID: <span th:text="${order.id}"></span></h2>
+<form th:action="@{/order/pay/{id}(id=${order.id})}" method="post">
+    <label>Payment Method:</label>
+    <select name="method" required>
+        <option value="VOUCHER_CODE">Voucher Code</option>
+        <option value="BANK_TRANSFER">Bank Transfer</option>
+    </select>
+
+    <label>Voucher Code (If applicable):</label>
+    <input type="text" name="voucherCode">
+
+    <label>Bank Name (If applicable):</label>
+    <input type="text" name="bankName">
+    <label>Reference Code (If applicable):</label>
+    <input type="text" name="referenceCode">
+
+    <button type="submit">Submit Payment</button>
+</form>
+</body>
+</html>
