@@ -3,19 +3,23 @@ package id.ac.ui.cs.advprog.eshop.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentTest {
     private Order order;
-
     @BeforeEach
     void setUp() {
-        // dummy order untuk disambungkan ke payment
-        order = new Order(UUID.randomUUID(), null, 1708560000L, "Andi Hakim");
+        List<Product> products = new ArrayList<>();
+        Product product = new Product();
+        product.setProductId(UUID.randomUUID());
+        product.setProductName("Produk Dummy");
+        product.setProductQuantity(1);
+        products.add(product);
+
+        // 2. Masukkan list products tersebut ke dalam Order
+        order = new Order(UUID.randomUUID(), products, 1708560000L, "Andi Hakim");
     }
 
     // --- VOUCHER CODE TESTS ---
