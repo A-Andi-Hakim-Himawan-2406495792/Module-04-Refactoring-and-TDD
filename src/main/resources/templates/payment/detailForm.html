@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Payment Detail</title>
+</head>
+<body>
+<h2>Check Payment Status</h2>
+<form th:action="@{/payment/detail}" method="post">
+    <label>Input Payment ID:</label>
+    <input type="text" name="paymentId" required>
+    <button type="submit">Check</button>
+</form>
+</body>
+</html>
