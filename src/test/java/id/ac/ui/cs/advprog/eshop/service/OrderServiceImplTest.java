@@ -64,7 +64,8 @@ class OrderServiceImplTest {
         Order order = orders.get(1);
         doReturn(Optional.of(order)).when(orderRepository).findById(order.getId());
 
-        assertNull(orderService.createOrder(order));
+        assertThrows(IllegalStateException.class,
+                () -> orderService.createOrder(order));
         verify(orderRepository, times(0)).save(order);
     }
 

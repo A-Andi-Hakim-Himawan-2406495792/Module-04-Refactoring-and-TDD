@@ -22,7 +22,7 @@ public class OrderServiceImpl implements OrderService {
             orderRepository.save(order);
             return order;
         }
-        return null;
+        throw new IllegalStateException("Order already exists");
     }
 
     @Override
