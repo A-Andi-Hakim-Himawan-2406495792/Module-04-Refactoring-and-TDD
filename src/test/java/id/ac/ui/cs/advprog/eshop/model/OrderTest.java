@@ -36,7 +36,7 @@ class OrderTest {
         this.products.clear();
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Order order = new Order(UUID.fromString("13652556-012a-4c07-b546-54eb1396d79b"),
+            new Order(UUID.fromString("13652556-012a-4c07-b546-54eb1396d79b"),
                     this.products, 1708560000L, "Safira Sudrajat");
         });
     }
@@ -72,7 +72,7 @@ class OrderTest {
     @Test
     void testCreateOrderInvalidStatus() {
         assertThrows(IllegalArgumentException.class, () -> {
-            Order order = new Order(UUID.fromString("13652556-012a-4c07-b546-54eb1396d79b"),
+            new Order(UUID.fromString("13652556-012a-4c07-b546-54eb1396d79b"),
                     this.products, 1708560000L, "Safira Sudrajat", "MEOW");
         });
     }
