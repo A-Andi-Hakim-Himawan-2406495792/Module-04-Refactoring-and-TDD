@@ -1,5 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
+import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
@@ -27,14 +29,15 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment setStatus(Payment payment, String status) {
         Payment savedPayment = paymentRepository.findById(payment.getId());
+
         if (savedPayment != null) {
             savedPayment.setStatus(status);
 
-            // Sync status pesanan sesuai deskripsi fitur
-            if ("SUCCESS".equals(status)) {
-                savedPayment.getOrder().setStatus("SUCCESS");
-            } else if ("REJECTED".equals(status)) {
-                savedPayment.getOrder().setStatus("FAILED");
+            // REFACTOR: Menggunakan Enum PaymentStatus dan OrderStatus
+            if (PaymentStatus.SUCCESS.getValue().equals(status)) {
+                savedPayment.getOrder().setStatus(OrderStatus.SUCCESS.getValue());
+            } else if (PaymentStatus.REJECTED.getValue().equals(status)) {
+                savedPayment.getOrder().setStatus(OrderStatus.FAILED.getValue());
             }
 
             paymentRepository.save(savedPayment);
