@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.Mockito;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,8 +51,7 @@ class ProductServiceImplTest {
         Product p1 = new Product();
         Product p2 = new Product();
 
-        Iterator<Product> iterator = List.of(p1, p2).iterator();
-        Mockito.when(repository.findAll()).thenReturn(iterator);
+        Mockito.when(repository.findAll()).thenReturn(List.of(p1, p2));
 
         List<Product> result = service.findAll();
 
@@ -65,8 +63,7 @@ class ProductServiceImplTest {
         Product p1 = new Product();
         Product p2 = new Product();
 
-        Iterator<Product> iterator = List.of(p1, p2).iterator();
-        Mockito.when(repository.findAll()).thenReturn(iterator);
+        Mockito.when(repository.findAll()).thenReturn(List.of(p1, p2));
 
         List<Product> result = service.findAll();
 
@@ -78,8 +75,7 @@ class ProductServiceImplTest {
         Product p1 = new Product();
         Product p2 = new Product();
 
-        Iterator<Product> iterator = List.of(p1, p2).iterator();
-        Mockito.when(repository.findAll()).thenReturn(iterator);
+        Mockito.when(repository.findAll()).thenReturn(List.of(p1, p2));
 
         List<Product> result = service.findAll();
 

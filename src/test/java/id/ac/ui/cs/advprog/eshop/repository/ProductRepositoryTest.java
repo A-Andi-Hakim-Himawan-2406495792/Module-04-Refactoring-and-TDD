@@ -4,7 +4,6 @@ import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,7 +26,7 @@ class ProductRepositoryTest {
 
         productRepository.create(product);
 
-        Product saved = productRepository.findAll().next();
+        Product saved = productRepository.findAll().get(0);
         assertNotNull(saved.getProductId(), "Created product should have ID");
     }
 
@@ -39,7 +38,7 @@ class ProductRepositoryTest {
 
         productRepository.create(product);
 
-        Product saved = productRepository.findAll().next();
+        Product saved = productRepository.findAll().get(0);
         assertEquals("Sampo Cap Bambang", saved.getProductName(), "Name should be saved");
     }
 
@@ -51,13 +50,13 @@ class ProductRepositoryTest {
 
         productRepository.create(product);
 
-        Product saved = productRepository.findAll().next();
+        Product saved = productRepository.findAll().get(0);
         assertEquals(100, saved.getProductQuantity(), "Quantity should be saved");
     }
 
     @Test
     void findAll_emptyRepository() {
-        assertFalse(productRepository.findAll().hasNext(), "Empty repo should return no data");
+        assertTrue(productRepository.findAll().isEmpty(), "Empty repo should return no data");
     }
 
     @Test
@@ -88,7 +87,7 @@ class ProductRepositoryTest {
 
         productRepository.deleteById(product.getProductId());
 
-        assertFalse(productRepository.findAll().hasNext(), "Product should be deleted");
+        assertTrue(productRepository.findAll().isEmpty(), "Product should be deleted");
     }
 
     @Test

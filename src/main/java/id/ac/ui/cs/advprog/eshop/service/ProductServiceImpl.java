@@ -4,8 +4,6 @@ import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,10 +24,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findAll() {
-        Iterator<Product> iterator = productRepository.findAll();
-        List<Product> products = new ArrayList<>();
-        iterator.forEachRemaining(products::add);
-        return products;
+        return productRepository.findAll();
     }
 
     @Override

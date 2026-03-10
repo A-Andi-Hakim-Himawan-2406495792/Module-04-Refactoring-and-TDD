@@ -4,7 +4,6 @@ import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,8 +20,8 @@ public class ProductRepository {
         return product;
     }
 
-    public Iterator<Product> findAll() {
-        return productData.iterator();
+    public List<Product> findAll() {
+        return new ArrayList<>(productData);
     }
 
     public Optional<Product> findById(UUID id) {
