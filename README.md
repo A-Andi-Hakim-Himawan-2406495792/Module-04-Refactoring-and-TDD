@@ -254,3 +254,25 @@ Secara keseluruhan, unit test yang sudah saya buat pada tutorial ini sudah berup
 
 **Hal yang perlu diperbaiki ke depannya:**
 Untuk aspek **Timely**, saya harus lebih disiplin menahan diri agar tidak menulis kode produksi sebelum tesnya benar-benar berstatus **[RED]**. Selain itu, saya juga perlu membiasakan diri menggunakan teknik *mocking* (seperti Mockito) agar tes untuk lapisan *Service* atau *Controller* benar-benar terisolasi dari *Repository*, sehingga prinsip *Independent* pun dapat terpenuhi dengan lebih sempurna.
+
+---
+
+## Bonus 2 Reflection: Code Review & Refactoring
+
+**1. Explain what you think about your partner’s code? Are there any aspects that are still lacking from your partner’s code?**
+Secara fungsionalitas, kode *Amar* saya sudah berjalan dengan baik. Namun, dari segi kualitas desain kode (*clean code*), masih terdapat beberapa kekurangan. Ada beberapa *looping* manual yang terlalu *verbose* di kelas repositori, serta kurangnya enkapsulasi (Feature Envy) dan penggunaan tipe data primitif secara bebas (Primitive Obsession) pada fitur Payment.
+
+**2. What did you do to contribute to your partner’s code?**
+Saya melakukan *code review* secara langsung pada *Pull Request* miliknya di GitHub dan memberikan masukan mengenai efisiensi serta praktik OOP yang lebih baik di kolom deskripsi. Setelah itu, saya membuat *branch* baru bernama `refactor/2406495792`, mengeksekusi perbaikan kode tersebut, menjalankan unit test untuk memastikan fungsionalitas tidak rusak, dan mengajukan Pull Request kembali ke *branch* `order` miliknya.
+
+**3. What code smells did you find on your partner’s code?**
+* **Primitive Obsession:** Di `Payment.java` dan `PaymentServiceImpl.java`, status dan metode pembayaran di-set menggunakan *hardcoded string* ("PENDING", "VOUCHER") alih-alih menggunakan Enum.
+* **Feature Envy (Anemic Domain Model):** Kelas `Payment` menggunakan anotasi `@Setter` secara bebas, sementara seluruh logika validasi (seperti cek panjang voucher dan COD) justru diletakkan di `PaymentServiceImpl`.
+* **Dispensables (Inefficient Loop / Boilerplate):** Pada `OrderRepository`, pembaruan data dilakukan dengan metode `remove()` lalu `add()`, dan pencarian data dilakukan dengan *for-loop* konvensional.
+* **Potential Bug:** Pada `PaymentServiceImpl`, metode `setStatus` mengubah status objek namun tidak memanggil `paymentRepository.save()`. Pada `Order.java`, `products.isEmpty()` langsung dipanggil tanpa memeriksa *null*, yang dapat memicu `NullPointerException`.
+
+**4. What refactoring steps did you suggest and execute to fix those smells?**
+* **Introduce Enum:** Saya membuatkan enum `PaymentStatus` dan `PaymentMethod` untuk menggantikan penggunaan *magic strings*.
+* **Move Method & Remove Lombok Setter:** Saya memindahkan logika validasi voucher dan COD kembali ke model `Payment`, menghapus `@Setter` pada level kelas, dan membuat fungsi `setStatus` manual.
+* **Replace with Stream API & Simplify Iterable:** Saya me-refactor `OrderRepository` menggunakan `.set()` untuk efisiensi pembaruan list, serta mengimplementasikan **Java Stream API** untuk pencarian data agar lebih deklaratif.
+* **Add Guard Clause & Save Call:** Menambahkan pengecekan *null* di konstruktor `Order` dan memastikan pemanggilan `paymentRepository.save()` di akhir operasi pengubahan status.
