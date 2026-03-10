@@ -218,3 +218,39 @@ Sebaliknya, jika kode dibiarkan berantakan seperti pada branch `before-solid`, a
 * **Risiko Kerusakan Skala Besar (*Ripple Effect*):** Melanggar OCP berarti untuk menambah fungsionalitas baru, kita harus terus-menerus memodifikasi kode lama yang sudah berjalan stabil. Setiap modifikasi pada kode lama membawa risiko merusak fitur lain yang sudah ada (*regression bug*).
 
 ---
+# Refleksi: Test-Driven Development & Prinsip F.I.R.S.T.
+
+---
+
+## 1. Refleksi Alur TDD Berdasarkan Pertanyaan Evaluasi Percival (2017)
+
+Jujur, pada awalnya alur TDD, menulis tes terlebih dahulu sebelum menulis kode fitur  terasa cukup asing dan terkesan memperlambat proses *coding*. Biasanya insting pertama saya adalah langsung menulis logika programnya. Namun setelah dievaluasi menggunakan kacamata Percival (2017), alur TDD ini ternyata **sangat berguna**.
+
+Alur ini memaksa saya untuk benar-benar memahami tujuan dari kode yang ingin dibuat, apa inputnya, apa ekspektasi outputnya sebelum asal mengetik. TDD juga memberikan semacam *"safety net"* atau rasa aman. Ketika melakukan *refactoring* atau mengubah logika, saya tidak perlu khawatir merusak fitur yang sudah berjalan, karena jika ada yang rusak, tes akan langsung menampilkan status merah (*RED*) sebagai sinyal peringatan.
+
+**Hal yang perlu diperbaiki ke depannya:**
+Saya masih kesulitan memikirkan semua kemungkinan *unhappy path* atau *edge case* di awal. Ke depannya, sebelum memulai fase **[RED]**, saya perlu meluangkan waktu lebih banyak untuk membedah *requirements* secara menyeluruh dan memetakan skenario-skenario kegagalan, bukan hanya berfokus pada *happy path* saja.
+
+---
+
+## 2. Evaluasi Unit Test Berdasarkan Prinsip F.I.R.S.T.
+
+Secara keseluruhan, unit test yang sudah saya buat pada tutorial ini sudah berupaya mengikuti prinsip F.I.R.S.T., meskipun masih ada beberapa ruang untuk perbaikan.
+
+- **Fast (Cepat)**
+  Tes berjalan sangat cepat karena berbentuk *unit test* sederhana tanpa koneksi database yang berat, sehingga tidak memakan waktu eksekusi yang lama.
+
+- **Independent (Mandiri)**
+  Saya sudah menggunakan anotasi `@BeforeEach` untuk mereset dan menyiapkan *dummy data* (seperti objek `Order` dan `Product`) dari awal sebelum setiap metode tes dijalankan. Dengan begitu, satu tes tidak akan mengubah *state* atau mengganggu tes lainnya.
+
+- **Repeatable (Dapat Diulang)**
+  Tes dapat dijalankan berkali-kali di *environment* lokal manapun tanpa mengalami perubahan hasil, karena tidak bergantung pada faktor eksternal yang tidak stabil.
+
+- **Self-Validating (Validasi Mandiri)**
+  Saya menggunakan fungsi bawaan JUnit seperti `assertEquals`, `assertTrue`, dan `assertThrows`. Hasil tes langsung tersaji dalam bentuk *boolean* — *Passed* (hijau) atau *Failed* (merah) — tanpa perlu dicek secara manual melalui `System.out.println`.
+
+- **Timely (Tepat Waktu)**
+  Ini bagian yang masih paling menantang bagi saya. *Timely* berarti tes seharusnya ditulis *tepat sebelum* kode produksi dibuat, sesuai alur TDD. Saya akui kadang masih tergoda untuk menulis *skeleton* kode atau sedikit logikanya terlebih dahulu sebelum menulis tesnya, karena merasa lebih mudah.
+
+**Hal yang perlu diperbaiki ke depannya:**
+Untuk aspek **Timely**, saya harus lebih disiplin menahan diri agar tidak menulis kode produksi sebelum tesnya benar-benar berstatus **[RED]**. Selain itu, saya juga perlu membiasakan diri menggunakan teknik *mocking* (seperti Mockito) agar tes untuk lapisan *Service* atau *Controller* benar-benar terisolasi dari *Repository*, sehingga prinsip *Independent* pun dapat terpenuhi dengan lebih sempurna.
