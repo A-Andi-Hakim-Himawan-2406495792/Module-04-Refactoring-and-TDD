@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
 import id.ac.ui.cs.advprog.eshop.model.Order;
+import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,15 @@ class PaymentRepositoryTest {
     void setUp() {
         paymentRepository = new PaymentRepository();
         payments = new ArrayList<>();
-        order = new Order(UUID.randomUUID(), new ArrayList<>(), 1708560000L, "Andi Hakim");
+
+        List<Product> products = new ArrayList<>();
+        Product product = new Product();
+        product.setProductId(UUID.randomUUID());
+        product.setProductName("Produk Dummy");
+        product.setProductQuantity(1);
+        products.add(product);
+
+        order = new Order(UUID.randomUUID(), products, 1708560000L, "Andi Hakim");
 
         Map<String, String> paymentData1 = new HashMap<>();
         paymentData1.put("voucherCode", "ESHOP1234ABC5678");
