@@ -18,7 +18,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order createOrder(Order order) {
-        if (orderRepository.findById(order.getId()) == null) {
+        if (orderRepository.findById(order.getId()).isEmpty()) {
             orderRepository.save(order);
             return order;
         }
@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order updateStatus(UUID orderId, String status) {
-        Order order = orderRepository.findById(orderId);
+        Order order = orderRepository.findById(orderId).orElse(null);
         if (order != null) {
             Order newOrder = new Order(order.getId(), order.getProducts(),
                     order.getOrderTime(), order.getAuthor(), status);
@@ -40,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findById(UUID orderId) {
-        return orderRepository.findById(orderId);
+        return orderRepository.findById(orderId).orElse(null);
     }
 
     @Override

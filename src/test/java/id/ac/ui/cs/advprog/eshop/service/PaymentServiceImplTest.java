@@ -67,7 +67,7 @@ class PaymentServiceImplTest {
         // REFACTOR: Gunakan status yang valid untuk Payment (REJECTED atau SUCCESS)
         payment.setStatus(PaymentStatus.REJECTED.getValue());
 
-        doReturn(payment).when(paymentRepository).findById(payment.getId());
+        doReturn(Optional.of(payment)).when(paymentRepository).findById(payment.getId());
         doReturn(payment).when(paymentRepository).save(payment);
 
         // REFACTOR: Gunakan Enum saat memanggil fungsi setStatus dari service
@@ -85,7 +85,7 @@ class PaymentServiceImplTest {
         // REFACTOR: Gunakan status yang valid untuk Payment
         payment.setStatus(PaymentStatus.SUCCESS.getValue());
 
-        doReturn(payment).when(paymentRepository).findById(payment.getId());
+        doReturn(Optional.of(payment)).when(paymentRepository).findById(payment.getId());
         doReturn(payment).when(paymentRepository).save(payment);
 
         // REFACTOR: Gunakan Enum saat memanggil fungsi setStatus dari service
@@ -98,7 +98,7 @@ class PaymentServiceImplTest {
     @Test
     void testGetPaymentIfFound() {
         Payment payment = payments.get(0);
-        doReturn(payment).when(paymentRepository).findById(payment.getId());
+        doReturn(Optional.of(payment)).when(paymentRepository).findById(payment.getId());
 
         Payment result = paymentService.getPayment(payment.getId());
         assertEquals(payment.getId(), result.getId());

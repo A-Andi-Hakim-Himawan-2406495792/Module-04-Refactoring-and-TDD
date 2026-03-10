@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,7 +76,7 @@ class ProductRepositoryTest {
 
         productRepository.update(updated);
 
-        assertEquals("New", productRepository.findById(id).getProductName(), "Name should update");
+        assertEquals("New", productRepository.findById(id).orElseThrow().getProductName(), "Name should update");
     }
 
     @Test
@@ -91,8 +92,8 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void findById_notFound_shouldReturnNull() {
-        assertNull(productRepository.findById(UUID.randomUUID()), "Unknown ID should return null");
+    void findById_notFound_shouldReturnEmpty() {
+        assertEquals(Optional.empty(), productRepository.findById(UUID.randomUUID()), "Unknown ID should return empty optional");
     }
 
     @Test
@@ -101,8 +102,8 @@ class ProductRepositoryTest {
         product.setProductId(UUID.randomUUID());
         product.setProductName("Sampo Cap Bambang");
         productRepository.create(product);
-        Product foundProduct = productRepository.findById(UUID.randomUUID());
-        assertNull(foundProduct, "Product seharusnya bernilai null jika UUID tidak ditemukan di repository");
+        Optional<Product> foundProduct = productRepository.findById(UUID.randomUUID());
+        assertTrue(foundProduct.isEmpty(), "Product seharusnya Optional.empty jika UUID tidak ditemukan di repository");
     }
 
     @Test
@@ -117,7 +118,7 @@ class ProductRepositoryTest {
         nonExistentProduct.setProductName("Produk Ilegal");
 
         productRepository.update(nonExistentProduct);
-        Product originalProduct = productRepository.findById(product.getProductId());
+        Product originalProduct = productRepository.findById(product.getProductId()).orElseThrow();
         assertEquals("Sampo Cap Bambang", originalProduct.getProductName(), "Nama produk tidak boleh berubah jika mencoba update produk yang tidak ada");
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class PaymentRepository {
@@ -22,12 +23,11 @@ public class PaymentRepository {
         return payment;
     }
 
-    public Payment findById(String id) {
+    public Optional<Payment> findById(String id) {
         // REFACTOR: Menggunakan Java Stream API untuk pencarian yang lebih rapi
         return paymentData.stream()
                 .filter(savedPayment -> savedPayment.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     public List<Payment> getAllPayments() {

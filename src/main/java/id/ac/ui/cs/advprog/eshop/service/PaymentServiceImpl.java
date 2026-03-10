@@ -30,7 +30,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment setStatus(Payment payment, String status) {
-        Payment savedPayment = paymentRepository.findById(payment.getId());
+        Payment savedPayment = paymentRepository.findById(payment.getId()).orElse(null);
 
         if (savedPayment != null) {
             savedPayment.setStatus(status);
@@ -51,7 +51,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment getPayment(String paymentId) {
-        return paymentRepository.findById(paymentId);
+        return paymentRepository.findById(paymentId).orElse(null);
     }
 
     @Override

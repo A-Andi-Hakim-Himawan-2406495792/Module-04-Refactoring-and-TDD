@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -26,13 +27,13 @@ public class OrderRepository {
     }
 
     // Sesuaikan parameter id menjadi UUID
-    public Order findById(UUID id) {
+    public Optional<Order> findById(UUID id) {
         for (Order savedOrder : orderData) {
             if (savedOrder.getId().equals(id)) {
-                return savedOrder;
+                return Optional.of(savedOrder);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<Order> findAllByAuthor(String author) {
