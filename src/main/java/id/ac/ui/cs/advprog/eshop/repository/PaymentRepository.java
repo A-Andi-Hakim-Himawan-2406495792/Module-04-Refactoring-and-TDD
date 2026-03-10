@@ -11,26 +11,23 @@ public class PaymentRepository {
     private List<Payment> paymentData = new ArrayList<>();
 
     public Payment save(Payment payment) {
-        int i = 0;
-        for (Payment savedPayment : paymentData) {
-            if (savedPayment.getId().equals(payment.getId())) {
-                paymentData.remove(i);
-                paymentData.add(i, payment);
+        // REFACTOR: Menggunakan method set() yang lebih efisien dibandingkan remove() lalu add()
+        for (int i = 0; i < paymentData.size(); i++) {
+            if (paymentData.get(i).getId().equals(payment.getId())) {
+                paymentData.set(i, payment);
                 return payment;
             }
-            i += 1;
         }
         paymentData.add(payment);
         return payment;
     }
 
     public Payment findById(String id) {
-        for (Payment savedPayment : paymentData) {
-            if (savedPayment.getId().equals(id)) {
-                return savedPayment;
-            }
-        }
-        return null;
+        // REFACTOR: Menggunakan Java Stream API untuk pencarian yang lebih rapi
+        return paymentData.stream()
+                .filter(savedPayment -> savedPayment.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Payment> getAllPayments() {
