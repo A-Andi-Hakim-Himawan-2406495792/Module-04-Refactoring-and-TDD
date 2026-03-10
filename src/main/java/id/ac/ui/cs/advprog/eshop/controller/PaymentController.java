@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.controller;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.service.PaymentService;
 import org.springframework.stereotype.Controller;
@@ -50,7 +51,7 @@ public class PaymentController {
     @PostMapping("/admin/set-status/{paymentId}")
     public String setPaymentStatus(@PathVariable String paymentId, @RequestParam String status) {
         Payment payment = paymentService.getPayment(paymentId);
-        paymentService.setStatus(payment, status);
+        paymentService.setStatus(payment, PaymentStatus.valueOf(status.toUpperCase()));
         return "redirect:/payment/admin/list";
     }
 }

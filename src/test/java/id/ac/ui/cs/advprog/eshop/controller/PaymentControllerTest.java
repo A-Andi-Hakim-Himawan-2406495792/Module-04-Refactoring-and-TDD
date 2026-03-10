@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.controller;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.model.Product;
@@ -96,7 +97,7 @@ class PaymentControllerTest {
     @Test
     void testAdminSetStatusPost() throws Exception {
         when(paymentService.getPayment("PAY-123")).thenReturn(payment);
-        when(paymentService.setStatus(payment, "SUCCESS")).thenReturn(payment);
+        when(paymentService.setStatus(payment, PaymentStatus.SUCCESS)).thenReturn(payment);
 
         mockMvc.perform(post("/payment/admin/set-status/PAY-123")
                         .param("status", "SUCCESS"))

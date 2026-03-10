@@ -29,16 +29,15 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment setStatus(Payment payment, String status) {
+    public Payment setStatus(Payment payment, PaymentStatus status) {
         Payment savedPayment = paymentRepository.findById(payment.getId()).orElse(null);
 
         if (savedPayment != null) {
-            savedPayment.setStatus(status);
+            savedPayment.setStatus(status.name());
 
-            // REFACTOR: Menggunakan Enum PaymentStatus dan OrderStatus
-            if (PaymentStatus.SUCCESS.getValue().equals(status)) {
+            if (status == PaymentStatus.SUCCESS) {
                 savedPayment.getOrder().setStatus(OrderStatus.SUCCESS.getValue());
-            } else if (PaymentStatus.REJECTED.getValue().equals(status)) {
+            } else if (status == PaymentStatus.REJECTED) {
                 savedPayment.getOrder().setStatus(OrderStatus.FAILED.getValue());
             }
 

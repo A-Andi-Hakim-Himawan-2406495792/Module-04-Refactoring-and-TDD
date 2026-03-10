@@ -71,7 +71,7 @@ class PaymentServiceImplTest {
         doReturn(payment).when(paymentRepository).save(payment);
 
         // REFACTOR: Gunakan Enum saat memanggil fungsi setStatus dari service
-        Payment result = paymentService.setStatus(payment, PaymentStatus.SUCCESS.getValue());
+        Payment result = paymentService.setStatus(payment, PaymentStatus.SUCCESS);
 
         assertEquals(PaymentStatus.SUCCESS.getValue(), result.getStatus());
         assertEquals(OrderStatus.SUCCESS.getValue(), result.getOrder().getStatus()); // Order harus jadi SUCCESS
@@ -89,7 +89,7 @@ class PaymentServiceImplTest {
         doReturn(payment).when(paymentRepository).save(payment);
 
         // REFACTOR: Gunakan Enum saat memanggil fungsi setStatus dari service
-        Payment result = paymentService.setStatus(payment, PaymentStatus.REJECTED.getValue());
+        Payment result = paymentService.setStatus(payment, PaymentStatus.REJECTED);
 
         assertEquals(PaymentStatus.REJECTED.getValue(), result.getStatus());
         assertEquals(OrderStatus.FAILED.getValue(), result.getOrder().getStatus()); // Order harus jadi FAILED
