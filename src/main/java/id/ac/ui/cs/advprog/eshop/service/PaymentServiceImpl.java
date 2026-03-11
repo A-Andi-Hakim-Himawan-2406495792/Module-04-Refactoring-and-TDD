@@ -5,7 +5,6 @@ import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +15,11 @@ import java.util.UUID;
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
-    @Autowired
-    private PaymentRepository paymentRepository;
+    private final PaymentRepository paymentRepository;
+
+    public PaymentServiceImpl(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
 
     @Override
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
@@ -27,16 +29,15 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment setStatus(Payment payment, String status) {
-        Payment savedPayment = paymentRepository.findById(payment.getId());
+    public Payment setStatus(Payment payment, PaymentStatus status) {
+        Payment savedPayment = paymentRepository.findById(payment.getId()).orElse(null);
 
         if (savedPayment != null) {
-            savedPayment.setStatus(status);
+            savedPayment.setStatus(status.name());
 
-            // REFACTOR: Menggunakan Enum PaymentStatus dan OrderStatus
-            if (PaymentStatus.SUCCESS.getValue().equals(status)) {
+            if (status == PaymentStatus.SUCCESS) {
                 savedPayment.getOrder().setStatus(OrderStatus.SUCCESS.getValue());
-            } else if (PaymentStatus.REJECTED.getValue().equals(status)) {
+            } else if (status == PaymentStatus.REJECTED) {
                 savedPayment.getOrder().setStatus(OrderStatus.FAILED.getValue());
             }
 
@@ -49,7 +50,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment getPayment(String paymentId) {
-        return paymentRepository.findById(paymentId);
+        return paymentRepository.findById(paymentId).orElse(null);
     }
 
     @Override

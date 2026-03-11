@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,7 +51,7 @@ class PaymentRepositoryTest {
         Payment payment = payments.get(0);
         Payment result = paymentRepository.save(payment);
 
-        Payment findResult = paymentRepository.findById(payments.get(0).getId());
+        Payment findResult = paymentRepository.findById(payments.get(0).getId()).orElseThrow();
         assertEquals(payment.getId(), result.getId());
         assertEquals(payment.getId(), findResult.getId());
         assertEquals(payment.getMethod(), findResult.getMethod());
@@ -66,7 +67,7 @@ class PaymentRepositoryTest {
         newPayment.setStatus("SUCCESS");
         Payment result = paymentRepository.save(newPayment);
 
-        Payment findResult = paymentRepository.findById(payment.getId());
+        Payment findResult = paymentRepository.findById(payment.getId()).orElseThrow();
         assertEquals(payment.getId(), result.getId());
         assertEquals("SUCCESS", findResult.getStatus());
     }
@@ -77,7 +78,7 @@ class PaymentRepositoryTest {
             paymentRepository.save(payment);
         }
 
-        Payment findResult = paymentRepository.findById(payments.get(1).getId());
+        Payment findResult = paymentRepository.findById(payments.get(1).getId()).orElseThrow();
         assertEquals(payments.get(1).getId(), findResult.getId());
     }
 
@@ -87,8 +88,8 @@ class PaymentRepositoryTest {
             paymentRepository.save(payment);
         }
 
-        Payment findResult = paymentRepository.findById("PAY-INVALID");
-        assertNull(findResult);
+        Optional<Payment> findResult = paymentRepository.findById("PAY-INVALID");
+        assertTrue(findResult.isEmpty());
     }
 
     @Test

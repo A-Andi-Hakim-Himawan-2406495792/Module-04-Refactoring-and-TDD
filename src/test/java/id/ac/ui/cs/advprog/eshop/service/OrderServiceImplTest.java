@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,9 +62,10 @@ class OrderServiceImplTest {
     @Test
     void testCreateOrderIfAlreadyExists() {
         Order order = orders.get(1);
-        doReturn(order).when(orderRepository).findById(order.getId());
+        doReturn(Optional.of(order)).when(orderRepository).findById(order.getId());
 
-        assertNull(orderService.createOrder(order));
+        assertThrows(IllegalStateException.class,
+                () -> orderService.createOrder(order));
         verify(orderRepository, times(0)).save(order);
     }
 
@@ -73,7 +75,7 @@ class OrderServiceImplTest {
         Order newOrder = new Order(order.getId(), order.getProducts(), order.getOrderTime(),
                 order.getAuthor(), OrderStatus.SUCCESS.getValue());
 
-        doReturn(order).when(orderRepository).findById(order.getId());
+        doReturn(Optional.of(order)).when(orderRepository).findById(order.getId());
         doReturn(newOrder).when(orderRepository).save(any(Order.class));
 
         Order result = orderService.updateStatus(order.getId(), OrderStatus.SUCCESS.getValue());
@@ -86,7 +88,7 @@ class OrderServiceImplTest {
     @Test
     void testUpdateStatusInvalidStatus() {
         Order order = orders.get(1);
-        doReturn(order).when(orderRepository).findById(order.getId());
+        doReturn(Optional.of(order)).when(orderRepository).findById(order.getId());
 
         assertThrows(IllegalArgumentException.class,
                 () -> orderService.updateStatus(order.getId(), "MEOW"));
@@ -97,7 +99,7 @@ class OrderServiceImplTest {
     @Test
     void testUpdateStatusInvalidOrderId() {
         UUID dummyId = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        doReturn(null).when(orderRepository).findById(dummyId);
+        doReturn(Optional.empty()).when(orderRepository).findById(dummyId);
 
         assertThrows(NoSuchElementException.class,
                 () -> orderService.updateStatus(dummyId, OrderStatus.SUCCESS.getValue()));
@@ -108,7 +110,7 @@ class OrderServiceImplTest {
     @Test
     void testFindByIdIfIdFound() {
         Order order = orders.get(1);
-        doReturn(order).when(orderRepository).findById(order.getId());
+        doReturn(Optional.of(order)).when(orderRepository).findById(order.getId());
 
         Order result = orderService.findById(order.getId());
         assertEquals(order.getId(), result.getId());
@@ -117,7 +119,7 @@ class OrderServiceImplTest {
     @Test
     void testFindByIdIfIdNotFound() {
         UUID dummyId = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        doReturn(null).when(orderRepository).findById(dummyId);
+        doReturn(Optional.empty()).when(orderRepository).findById(dummyId);
 
         assertNull(orderService.findById(dummyId));
     }

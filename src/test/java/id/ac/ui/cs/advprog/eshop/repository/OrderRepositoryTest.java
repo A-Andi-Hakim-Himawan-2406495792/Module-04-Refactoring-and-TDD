@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,7 +45,7 @@ class OrderRepositoryTest {
         Order order = orders.get(1);
         Order result = orderRepository.save(order);
 
-        Order findResult = orderRepository.findById(orders.get(1).getId());
+        Order findResult = orderRepository.findById(orders.get(1).getId()).orElseThrow();
         assertEquals(order.getId(), result.getId());
         assertEquals(order.getId(), findResult.getId());
         assertEquals(order.getOrderTime(), findResult.getOrderTime());
@@ -62,7 +63,7 @@ class OrderRepositoryTest {
                 order.getAuthor(), OrderStatus.SUCCESS.getValue());
         Order result = orderRepository.save(newOrder);
 
-        Order findResult = orderRepository.findById(orders.get(1).getId());
+        Order findResult = orderRepository.findById(orders.get(1).getId()).orElseThrow();
         assertEquals(order.getId(), result.getId());
         assertEquals(order.getId(), findResult.getId());
         assertEquals(order.getOrderTime(), findResult.getOrderTime());
@@ -76,7 +77,7 @@ class OrderRepositoryTest {
             orderRepository.save(order);
         }
 
-        Order findResult = orderRepository.findById(orders.get(1).getId());
+        Order findResult = orderRepository.findById(orders.get(1).getId()).orElseThrow();
         assertEquals(orders.get(1).getId(), findResult.getId());
         assertEquals(orders.get(1).getOrderTime(), findResult.getOrderTime());
         assertEquals(orders.get(1).getAuthor(), findResult.getAuthor());
@@ -90,8 +91,8 @@ class OrderRepositoryTest {
         }
 
         // Modifikasi: Menggunakan UUID acak pengganti "zczc" karena tipe data sekarang UUID
-        Order findResult = orderRepository.findById(UUID.fromString("00000000-0000-0000-0000-000000000000"));
-        assertNull(findResult);
+        Optional<Order> findResult = orderRepository.findById(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        assertTrue(findResult.isEmpty());
     }
 
     @Test

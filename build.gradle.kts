@@ -81,7 +81,8 @@ pmd {
 	toolVersion = "7.0.0-rc4"
 	isConsoleOutput = true
 	isIgnoreFailures = false
-	ruleSets = listOf("category/java/bestpractices.xml")
+	ruleSets = emptyList()
+	ruleSetFiles = files("$rootDir/config/pmd/ruleset.xml")
 }
 tasks.withType<Pmd>().configureEach {
 	reports {

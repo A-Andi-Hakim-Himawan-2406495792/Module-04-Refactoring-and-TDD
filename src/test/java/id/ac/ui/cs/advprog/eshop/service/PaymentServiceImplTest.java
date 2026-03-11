@@ -67,11 +67,11 @@ class PaymentServiceImplTest {
         // REFACTOR: Gunakan status yang valid untuk Payment (REJECTED atau SUCCESS)
         payment.setStatus(PaymentStatus.REJECTED.getValue());
 
-        doReturn(payment).when(paymentRepository).findById(payment.getId());
+        doReturn(Optional.of(payment)).when(paymentRepository).findById(payment.getId());
         doReturn(payment).when(paymentRepository).save(payment);
 
         // REFACTOR: Gunakan Enum saat memanggil fungsi setStatus dari service
-        Payment result = paymentService.setStatus(payment, PaymentStatus.SUCCESS.getValue());
+        Payment result = paymentService.setStatus(payment, PaymentStatus.SUCCESS);
 
         assertEquals(PaymentStatus.SUCCESS.getValue(), result.getStatus());
         assertEquals(OrderStatus.SUCCESS.getValue(), result.getOrder().getStatus()); // Order harus jadi SUCCESS
@@ -85,11 +85,11 @@ class PaymentServiceImplTest {
         // REFACTOR: Gunakan status yang valid untuk Payment
         payment.setStatus(PaymentStatus.SUCCESS.getValue());
 
-        doReturn(payment).when(paymentRepository).findById(payment.getId());
+        doReturn(Optional.of(payment)).when(paymentRepository).findById(payment.getId());
         doReturn(payment).when(paymentRepository).save(payment);
 
         // REFACTOR: Gunakan Enum saat memanggil fungsi setStatus dari service
-        Payment result = paymentService.setStatus(payment, PaymentStatus.REJECTED.getValue());
+        Payment result = paymentService.setStatus(payment, PaymentStatus.REJECTED);
 
         assertEquals(PaymentStatus.REJECTED.getValue(), result.getStatus());
         assertEquals(OrderStatus.FAILED.getValue(), result.getOrder().getStatus()); // Order harus jadi FAILED
@@ -98,7 +98,7 @@ class PaymentServiceImplTest {
     @Test
     void testGetPaymentIfFound() {
         Payment payment = payments.get(0);
-        doReturn(payment).when(paymentRepository).findById(payment.getId());
+        doReturn(Optional.of(payment)).when(paymentRepository).findById(payment.getId());
 
         Payment result = paymentService.getPayment(payment.getId());
         assertEquals(payment.getId(), result.getId());
